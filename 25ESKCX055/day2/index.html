@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="css\formstylesheets.css"/>
 
+</head>
+<body>
+        <form class="background" id="frmRegister">
+            <h1 style="color: #1E3A8A;">Registration Form</h1>
+            <p>Submit this form for Online Registration</p>
+            <label>
+                 Full Name:
+                 <br>
+            <input type="text" id="txtname" required placeholder="Enter your Name"/>
+            </label>
+            <br><br>
+            <label>
+                Email:
+                <br>
+            <input type="email" id="txtEmail" required placeholder="Enter your Email"/>
+            </label>
+            <br><br>
+            <label>
+                Phone No:
+            </label>
+            <label for="dtDob" class="dtDOB">Birth Date:</label>
+            <br>
+            <input type="text" id="txtphone" required placeholder="Enter your number"/>
+            <input type="date" id="dtDob" name="dtDob"/>
+            <br><br>
+            <label>Gender:</label>
+            <br>
+            <input type="radio" id="check-male" name="gender" />
+            <label for="check-male">Male</label>
+
+            <input type="radio" id="check-female" name="gender"/>
+        
+            <label for="check-female">Female</label>
+
+            <input type="radio" id="check-transgender" name="gender" />
+            <label for="check-transgender">Transgender</label>
+
+            <input type="radio" id="check-other" name="gender" />
+            <label for="check-other">Prefer not to say </label>
+           
+            <br><br>
+            <label for="pwdPassword">Password: </label>
+            <input type="password" id="pwdPassword" name="pwdPassword" placeholder="Enter your password"/>
+            <br><br>
+            <label for="pwdConfirmPassword">Confirm Password:</label>
+            <input type="password" id="pwdConfirmPassword" name="pwdConfirmPassword" placeholder="Confirm your password"/>
+            <br><br>
+            <input type="submit" id="btnsubmit"/>
+        </form>
+    
+</body>
+</html>
