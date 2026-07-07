@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Public Holiday Calendar — Festivals, Dates &amp; Traditions</title>
+<meta name="description" content="An interactive Indian public holiday calendar with festival details, history, countdowns, statistics and a searchable database of national, gazetted, restricted and state holidays.">
+<meta name="keywords" content="Indian holidays, festival calendar, public holidays India, Diwali, Holi, Republic Day, holiday countdown">
+<meta property="og:title" content="Indian Public Holiday Calendar">
+<meta property="og:description" content="Explore India's festivals, holidays and traditions in one beautiful interactive calendar.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪔</text></svg>">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div id="loader" class="loader" aria-hidden="true">
+  <div class="diya">
+    <span class="diya-flame"></span>
+    <span class="diya-base">🪔</span>
+  </div>
+  <p>Lighting the diyas…</p>
+</div>
+
+<!-- ============ SCROLL PROGRESS ============ -->
+<div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="#home" class="brand">
+      <span class="brand-emoji">🪔</span>
+      <span class="brand-text">Utsav<em>Calendar</em></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="#home">Home</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#holidays">All Holidays</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#stats">Statistics</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="navbar-actions">
+      <button class="icon-btn" id="searchToggle" aria-label="Search holidays"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
+      <button class="icon-btn hamburger" id="hamburger" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+
+  <!-- Search overlay -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="globalSearch" placeholder="Search by name, state, religion, month, category…" aria-label="Search holidays">
+      <button id="searchClose" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1573455494060-c5595004fb6c?q=80&w=1920&auto=format&fit=crop');"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-pattern"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow" id="greeting">Good Day</p>
+    <h1 class="hero-title">The Rhythm of <span>India's</span> Festivals</h1>
+    <p class="hero-sub">Every diya, drumbeat and date — one living calendar of India's national, religious and state holidays.</p>
+
+    <div class="hero-clock" id="heroClock">
+      <div class="clock-time" id="clockTime">00:00:00</div>
+      <div class="clock-meta">
+        <span id="clockDate">Loading date…</span>
+        <span class="dot">•</span>
+        <span id="clockDay">—</span>
+        <span class="dot">•</span>
+        <span id="clockTz">IST</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="#holidays" class="btn btn-primary">Explore Holidays <i class="fa-solid fa-arrow-right"></i></a>
+      <a href="#calendar" class="btn btn-ghost">Open Calendar</a>
+    </div>
+
+    <div class="hero-today" id="heroToday">
+      <!-- populated by JS: today's holiday banner or countdown teaser -->
+    </div>
+  </div>
+
+  <button class="scroll-indicator" id="scrollIndicator" aria-label="Scroll down">
+    <i class="fa-solid fa-chevron-down"></i>
+  </button>
+</section>
+
+<!-- ============ COUNTDOWN STRIP ============ -->
+<section class="countdown-strip" aria-label="Countdown to next holiday">
+  <div class="countdown-inner" id="countdownStrip">
+    <div class="countdown-label">
+      <span class="emoji" id="cdEmoji">🎊</span>
+      <div>
+        <p class="cd-title" id="cdTitle">Loading next holiday…</p>
+        <p class="cd-sub" id="cdSub"></p>
+      </div>
+    </div>
+    <div class="countdown-timer" id="countdownTimer">
+      <div class="cd-unit"><span id="cdDays">00</span><small>Days</small></div>
+      <div class="cd-unit"><span id="cdHours">00</span><small>Hours</small></div>
+      <div class="cd-unit"><span id="cdMinutes">00</span><small>Minutes</small></div>
+      <div class="cd-unit"><span id="cdSeconds">00</span><small>Seconds</small></div>
+    </div>
+    <button class="btn btn-outline" id="notifyBtn"><i class="fa-regular fa-bell"></i> Notify Me</button>
+  </div>
+</section>
+
+<!-- ============ CALENDAR ============ -->
+<section class="section" id="calendar">
+  <div class="section-head">
+    <p class="eyebrow">02 — Interactive</p>
+    <h2>Calendar</h2>
+    <p class="section-sub">Browse any month, any year. Holidays glow, weekends dim, today pulses.</p>
+  </div>
+
+  <div class="calendar-card glass">
+    <div class="calendar-toolbar">
+      <div class="cal-nav">
+        <button id="prevMonth" class="icon-btn" aria-label="Previous month"><i class="fa-solid fa-chevron-left"></i></button>
+        <select id="monthSelect" aria-label="Select month"></select>
+        <select id="yearSelect" aria-label="Select year"></select>
+        <button id="nextMonth" class="icon-btn" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      <button id="todayBtn" class="btn btn-outline small">Today</button>
+    </div>
+
+    <div class="calendar-weekdays">
+      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <div class="calendar-legend">
+      <span><i class="dot today"></i> Today</span>
+      <span><i class="dot weekend"></i> Weekend</span>
+      <span><i class="dot holiday"></i> Holiday</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOLIDAYS LIST ============ -->
+<section class="section alt" id="holidays">
+  <div class="section-head">
+    <p class="eyebrow">03 — Database</p>
+    <h2>All Holidays</h2>
+    <p class="section-sub">Search and filter through national, gazetted, restricted, religious and state holidays.</p>
+  </div>
+
+  <div class="filters glass">
+    <input type="text" id="listSearch" placeholder="Search holiday, state, religion…" aria-label="Search holidays">
+    <select id="filterMonth" aria-label="Filter by month">
+      <option value="">All Months</option>
+    </select>
+    <select id="filterCategory" aria-label="Filter by category">
+      <option value="">All Categories</option>
+      <option value="national">National</option>
+      <option value="gazetted">Gazetted</option>
+      <option value="restricted">Restricted</option>
+      <option value="state">State</option>
+    </select>
+    <select id="filterReligion" aria-label="Filter by religion">
+      <option value="">All Religions</option>
+      <option value="Hindu">Hindu</option>
+      <option value="Muslim">Muslim</option>
+      <option value="Christian">Christian</option>
+      <option value="Sikh">Sikh</option>
+      <option value="Jain">Jain</option>
+      <option value="Buddhist">Buddhist</option>
+      <option value="Secular">Secular</option>
+    </select>
+    <select id="filterYear" aria-label="Filter by year"></select>
+  </div>
+
+  <div class="holiday-grid" id="holidayGrid"></div>
+  <p class="empty-state" id="emptyState" hidden>No holidays match your search. Try clearing a filter.</p>
+
+  <div class="downloads">
+    <button class="btn btn-outline small" id="downloadJson"><i class="fa-solid fa-file-code"></i> Download JSON</button>
+    <button class="btn btn-outline small" id="downloadCsv"><i class="fa-solid fa-file-csv"></i> Download CSV</button>
+    <button class="btn btn-outline small" id="printCalendar"><i class="fa-solid fa-print"></i> Print</button>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="section" id="gallery">
+  <div class="section-head">
+    <p class="eyebrow">04 — Visual</p>
+    <h2>Festival Gallery</h2>
+    <p class="section-sub">A glimpse of colour, light and celebration across the year.</p>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- ============ STATISTICS ============ -->
+<section class="section alt" id="stats">
+  <div class="section-head">
+    <p class="eyebrow">05 — At a glance</p>
+    <h2>Statistics</h2>
+    <p class="section-sub">A live breakdown of the selected year's holidays.</p>
+  </div>
+  <div class="stats-grid" id="statsGrid"></div>
+</section>
+
+<!-- ============ FESTIVAL OF THE MONTH + QUOTE ============ -->
+<section class="section highlight">
+  <div class="highlight-grid">
+    <div class="glass highlight-card" id="festivalOfMonth">
+      <p class="eyebrow">Festival of the Month</p>
+      <div id="fomContent">Loading…</div>
+    </div>
+    <div class="glass highlight-card">
+      <p class="eyebrow">Quote Generator</p>
+      <p class="quote-text" id="quoteText">"Every festival is a thread in India's endless tapestry."</p>
+      <button class="btn btn-outline small" id="newQuoteBtn"><i class="fa-solid fa-shuffle"></i> New Quote</button>
+    </div>
+    <div class="glass highlight-card">
+      <p class="eyebrow">Random Fact</p>
+      <p class="quote-text" id="factText">Loading a fact…</p>
+      <button class="btn btn-outline small" id="newFactBtn"><i class="fa-solid fa-shuffle"></i> New Fact</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="section-head">
+    <p class="eyebrow">06 — About</p>
+    <h2>About This Project</h2>
+  </div>
+  <div class="about-content glass">
+    <p>Utsav Calendar is a fully client-side portfolio project built to showcase India's rich festival calendar — national, gazetted, restricted, religious and state holidays — in one polished, interactive experience. No frameworks, no backend: just HTML, CSS and vanilla JavaScript, running entirely in your browser.</p>
+    <div class="about-grid">
+      <div><i class="fa-solid fa-database"></i><h4>30 Holidays</h4><p>Curated with history, traditions and trivia.</p></div>
+      <div><i class="fa-solid fa-calendar-days"></i><h4>5 Years</h4><p>2024–2028 supported, switch instantly.</p></div>
+      <div><i class="fa-solid fa-palette"></i><h4>Theme-aware</h4><p>Light &amp; dark, saved automatically.</p></div>
+      <div><i class="fa-solid fa-mobile-screen"></i><h4>Responsive</h4><p>Looks great from phone to desktop.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMIN PANEL ============ -->
+<section class="section alt" id="admin">
+  <div class="section-head">
+    <p class="eyebrow">07 — Local Admin</p>
+    <h2>Manage Your Holidays</h2>
+    <p class="section-sub">Add your own personal or regional holidays — stored only in your browser's local storage.</p>
+  </div>
+  <div class="admin-grid">
+    <form class="glass admin-form" id="adminForm">
+      <div class="form-row">
+        <input type="text" id="admName" placeholder="Holiday name" required>
+        <input type="date" id="admDate" required>
+      </div>
+      <div class="form-row">
+        <input type="text" id="admState" placeholder="State / region">
+        <select id="admCategory">
+          <option value="national">National</option>
+          <option value="gazetted">Gazetted</option>
+          <option value="restricted">Restricted</option>
+          <option value="state">State</option>
+        </select>
+      </div>
+      <textarea id="admNotes" placeholder="Notes / significance"></textarea>
+      <button type="submit" class="btn btn-primary small"><i class="fa-solid fa-plus"></i> Save Holiday</button>
+    </form>
+    <div class="admin-list" id="adminList">
+      <p class="empty-state">No custom holidays added yet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section" id="contact">
+  <div class="section-head">
+    <p class="eyebrow">08 — Get in touch</p>
+    <h2>Contact</h2>
+  </div>
+  <form class="glass contact-form" id="contactForm">
+    <div class="form-row">
+      <input type="text" placeholder="Your name" required>
+      <input type="email" placeholder="Your email" required>
+    </div>
+    <textarea placeholder="Your message" required></textarea>
+    <button type="submit" class="btn btn-primary small"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+  </form>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p>🪔 Utsav Calendar — built with HTML, CSS &amp; JavaScript.</p>
+    <p class="footer-note">Lunar and Hijri dates for 2027–2028 are best estimates. Please verify with the official Government of India gazette.</p>
+  </div>
+</footer>
+
+<!-- ============ FLOATING BUTTONS ============ -->
+<button id="backToTop" class="fab fab-top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+<a href="#contact" class="fab fab-contact" aria-label="Contact"><i class="fa-solid fa-comment-dots"></i></a>
+
+<!-- ============ HOLIDAY MODAL ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal glass" id="modalCard" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-banner" id="modalBanner">
+      <span class="modal-emoji" id="modalEmoji">🎉</span>
+    </div>
+    <div class="modal-body">
+      <p class="modal-category" id="modalCategory">Category</p>
+      <h3 id="modalName">Holiday Name</h3>
+      <p class="modal-hindi" id="modalHindi">हिंदी नाम</p>
+
+      <div class="modal-meta-row">
+        <span><i class="fa-regular fa-calendar"></i> <span id="modalDate">—</span></span>
+        <span><i class="fa-regular fa-clock"></i> <span id="modalCountdown">—</span></span>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="tab-btn active" data-tab="history">History</button>
+        <button class="tab-btn" data-tab="celebration">Celebration</button>
+        <button class="tab-btn" data-tab="facts">Facts</button>
+        <button class="tab-btn" data-tab="links">Links</button>
+      </div>
+
+      <div class="modal-tab-panel" id="panel-history">
+        <p id="modalHistory"></p>
+        <p><strong>Importance:</strong> <span id="modalImportance"></span></p>
+      </div>
+      <div class="modal-tab-panel" id="panel-celebration" hidden>
+        <p><strong>Celebration:</strong> <span id="modalCelebration"></span></p>
+        <p><strong>Traditional Foods:</strong> <span id="modalFoods"></span></p>
+        <p><strong>Dress:</strong> <span id="modalDress"></span></p>
+        <p><strong>Decoration:</strong> <span id="modalDecoration"></span></p>
+        <p><strong>States:</strong> <span id="modalStates"></span></p>
+      </div>
+      <div class="modal-tab-panel" id="panel-facts" hidden>
+        <ul id="modalFacts"></ul>
+        <blockquote id="modalQuote"></blockquote>
+      </div>
+      <div class="modal-tab-panel" id="panel-links" hidden>
+        <a id="modalWiki" target="_blank" rel="noopener"><i class="fa-brands fa-wikipedia-w"></i> Wikipedia</a>
+        <a id="modalGov" target="_blank" rel="noopener"><i class="fa-solid fa-landmark"></i> Government Reference</a>
+        <button class="btn btn-outline small" id="modalGCal"><i class="fa-brands fa-google"></i> Add to Google Calendar</button>
+        <button class="btn btn-outline small" id="modalIcs"><i class="fa-solid fa-download"></i> Download .ics</button>
+        <button class="btn btn-outline small" id="modalShare"><i class="fa-solid fa-share-nodes"></i> Share</button>
+        <button class="btn btn-outline small" id="modalFav"><i class="fa-regular fa-star"></i> Favourite</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CONFETTI CANVAS ============ -->
+<canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="holidays.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
